@@ -109,7 +109,6 @@ namespace cloudscribe.MetaWeblog
                         input.AppKey, 
                         input.UserName,
                         input.Password,
-                        permission,
                         cancellationToken);
                     break;
                 case "blogger.deletePost":

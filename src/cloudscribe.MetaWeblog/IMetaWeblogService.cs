@@ -91,7 +91,6 @@ namespace cloudscribe.MetaWeblog
             string key, 
             string userName,
             string password,
-            MetaWeblogSecurityResult permission,
             CancellationToken cancellationToken);
 
         #endregion
