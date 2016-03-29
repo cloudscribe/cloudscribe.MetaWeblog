@@ -135,7 +135,7 @@ namespace cloudscribe.MetaWeblog.Controllers
                 metaWeblogRequest.BlogId = permissions.BlogId;
             }
             
-            if(!permissions.IsAllowed)
+            if(!permissions.CanEdit)
             {
                 outCome = new MetaWeblogResult();
                 faultStruct = new FaultStruct();

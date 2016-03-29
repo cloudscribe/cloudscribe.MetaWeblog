@@ -10,19 +10,19 @@ namespace cloudscribe.MetaWeblog
         public MetaWeblogSecurityResult(
             string displayName,
             string blogId,
-            bool isAllowed, 
-            bool isBlogOwner)
+            bool isAuthenticated, 
+            bool canEdit)
         {
             this.displayName = displayName;
             this.blogId = blogId;
-            this.isAllowed = isAllowed;
-            this.isBlogOwner = isBlogOwner;
+            this.isAuthenticated = isAuthenticated;
+            this.canEdit = canEdit;
         }
 
         private string displayName = string.Empty;
         private string blogId = string.Empty;
-        private bool isAllowed = false;
-        private bool isBlogOwner = false;
+        private bool isAuthenticated = false;
+        private bool canEdit = false;
 
         public string DisplayName
         {
@@ -35,14 +35,14 @@ namespace cloudscribe.MetaWeblog
         }
 
 
-        public bool IsAllowed
+        public bool IsAuthenticated
         {
-            get { return isAllowed; }
+            get { return isAuthenticated; }
         }
 
-        public bool IsBlogOwner
+        public bool CanEdit
         {
-            get { return isBlogOwner; }
+            get { return canEdit; }
         }
     }
 }

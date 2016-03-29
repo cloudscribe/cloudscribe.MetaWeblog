@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-04
-// Last Modified:           2016-02-24
+// Last Modified:           2016-03-29
 // 
 
 using cloudscribe.MetaWeblog.Models;
@@ -82,7 +82,6 @@ namespace cloudscribe.MetaWeblog
                         input.BlogId,
                         input.UserName,
                         input.Password,
-                        permission.IsBlogOwner,
                         cancellationToken);
                     break;
                 case "wp.newCategory":
