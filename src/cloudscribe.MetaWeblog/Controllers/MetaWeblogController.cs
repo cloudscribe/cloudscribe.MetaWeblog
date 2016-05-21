@@ -2,23 +2,20 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-02-17
+// Last Modified:           2016-05-18
 // 
 
 using cloudscribe.MetaWeblog.Models;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.OptionsModel;
-using Microsoft.Extensions.PlatformAbstractions;
+using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.AspNet.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Hosting;
 
-// For more information on enabling Web API for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace cloudscribe.MetaWeblog.Controllers
 {
@@ -26,7 +23,7 @@ namespace cloudscribe.MetaWeblog.Controllers
     public class MetaWeblogController : Controller
     {
         public MetaWeblogController(
-            IApplicationEnvironment appEnv,
+            IHostingEnvironment appEnv,
             IMetaWeblogRequestParser metaWeblogRequestParser,
             IMetaWeblogRequestProcessor metaWeblogProcessor,
             IMetaWeblogResultFormatter metaWeblogResultFormatter,
@@ -53,7 +50,7 @@ namespace cloudscribe.MetaWeblog.Controllers
            
         }
 
-        private IApplicationEnvironment appEnv;
+        private IHostingEnvironment appEnv;
         private ApiOptions options;
         private IMetaWeblogSecurity security;
         private IMetaWeblogRequestProcessor processor;
@@ -76,7 +73,7 @@ namespace cloudscribe.MetaWeblog.Controllers
         {
             CancellationToken cancellationToken = HttpContext?.RequestAborted ?? CancellationToken.None;
 
-            var dumpFileBasePath = appEnv.ApplicationBasePath
+            var dumpFileBasePath = appEnv.ContentRootPath
                 + options.AppRootDumpFolderVPath.Replace('/', Path.DirectorySeparatorChar);
 
             XDocument postedXml = null;
