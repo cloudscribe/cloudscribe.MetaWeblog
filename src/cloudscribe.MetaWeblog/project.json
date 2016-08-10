@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.1-rc20160628",
+    "version": "1.0.1-rc20160810",
     "description": "a re-useable implementation of the metaweblog api for asp.net core",
     "authors": [ "Joe Audette" ],
     "packOptions": {

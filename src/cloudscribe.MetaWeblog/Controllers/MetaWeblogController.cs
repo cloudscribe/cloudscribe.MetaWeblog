@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-05-18
+// Last Modified:           2016-08-10
 // 
 
 using cloudscribe.MetaWeblog.Models;
@@ -58,16 +58,7 @@ namespace cloudscribe.MetaWeblog.Controllers
         private IMetaWeblogResultFormatter formatter;
         private IMetaWeblogRequestValidator validator;
         private ILogger log;
-
-
-        //http://stackoverflow.com/questions/7666835/xdocument-load-error
-
-
-        //public void Post([FromBody]string value)
-        //TODO: could we remove the value param and just get if from the request body
-        //XDocument postedXml = XDocument.Parse(value);
-
-        // POST api/values
+        
         [HttpPost]
         public async Task<IActionResult> Index()
         {
@@ -132,13 +123,9 @@ namespace cloudscribe.MetaWeblog.Controllers
                 metaWeblogRequest.BlogId = permissions.BlogId;
             }
             
-            if(!permissions.CanEdit)
+            if((!permissions.CanEditPosts)&&(!permissions.CanEditPages))
             {
                 outCome = new MetaWeblogResult();
-                faultStruct = new FaultStruct();
-                faultStruct.faultCode = "11"; // invalid access
-                faultStruct.faultString = "Authentication Failed";
-                outCome.Fault = faultStruct;
                 resultXml = formatter.Format(outCome);
                 return new XmlResult(resultXml);
             }
@@ -147,14 +134,11 @@ namespace cloudscribe.MetaWeblog.Controllers
             if (!isValid)
             {
                 outCome = new MetaWeblogResult();
-                faultStruct = new FaultStruct();
-                faultStruct.faultCode = "802"; // invalid access
-                faultStruct.faultString = "invalid request";
-                outCome.Fault = faultStruct;
+                outCome.AddValidatonFault();
                 resultXml = formatter.Format(outCome);
                 return new XmlResult(resultXml);
             }
-
+            
             outCome = await processor.ProcessRequest(
                 metaWeblogRequest, 
                 permissions, 

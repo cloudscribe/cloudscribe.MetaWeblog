@@ -11,18 +11,22 @@ namespace cloudscribe.MetaWeblog
             string displayName,
             string blogId,
             bool isAuthenticated, 
-            bool canEdit)
+            bool canEditPosts,
+            bool canEditPages
+            )
         {
             this.displayName = displayName;
             this.blogId = blogId;
             this.isAuthenticated = isAuthenticated;
-            this.canEdit = canEdit;
+            this.canEditPosts = canEditPosts;
+            this.canEditPages = canEditPages;
         }
 
         private string displayName = string.Empty;
         private string blogId = string.Empty;
         private bool isAuthenticated = false;
-        private bool canEdit = false;
+        private bool canEditPosts = false;
+        private bool canEditPages = false;
 
         public string DisplayName
         {
@@ -40,9 +44,14 @@ namespace cloudscribe.MetaWeblog
             get { return isAuthenticated; }
         }
 
-        public bool CanEdit
+        public bool CanEditPosts
         {
-            get { return canEdit; }
+            get { return canEditPosts; }
+        }
+
+        public bool CanEditPages
+        {
+            get { return canEditPages; }
         }
     }
 }

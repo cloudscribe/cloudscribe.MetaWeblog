@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-04
-// Last Modified:           2016-03-29
+// Last Modified:           2016-08-10
 // 
 
 using cloudscribe.MetaWeblog.Models;
@@ -35,27 +35,45 @@ namespace cloudscribe.MetaWeblog
             switch (input.MethodName)
             {
                 case "metaWeblog.newPost":
-                    output.PostId = await service.NewPost(
+                    if(permission.CanEditPosts)
+                    {
+                        output.PostId = await service.NewPost(
                         input.BlogId,
                         input.UserName,
                         input.Password,
-                        input.Post, 
+                        input.Post,
                         input.Publish,
                         permission.DisplayName
                         );
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+                    
                     break;
                 case "metaWeblog.editPost":
-                    output.Completed = await service.EditPost(
+                    if (permission.CanEditPosts)
+                    {
+                        output.Completed = await service.EditPost(
                         input.BlogId,
                         input.PostId,
                         input.UserName,
                         input.Password,
-                        input.Post, 
+                        input.Post,
                         input.Publish);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
+
                     break;
                 case "metaWeblog.getPost":
-
-                    var postStruct = await service.GetPost(
+                    if (permission.CanEditPosts)
+                    {
+                        var postStruct = await service.GetPost(
                         input.BlogId,
                         input.PostId,
                         input.UserName,
@@ -63,44 +81,81 @@ namespace cloudscribe.MetaWeblog
                         cancellationToken
                         );
 
-                    output.Post = postStruct;
-                    if(string.IsNullOrEmpty(output.Post.postId))
-                    {
-                        output.Fault = new FaultStruct { faultCode = "404", faultString = "post not found" };
+                        output.Post = postStruct;
+                        if (string.IsNullOrEmpty(output.Post.postId))
+                        {
+                            output.Fault = new FaultStruct { faultCode = "404", faultString = "post not found" };
+                        }
                     }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "metaWeblog.newMediaObject":
                 case "wp.uploadFile":
-                    output.MediaInfo = await service.NewMediaObject(
+                    if (permission.CanEditPosts || permission.CanEditPages)
+                    {
+                        output.MediaInfo = await service.NewMediaObject(
                         input.BlogId,
                         input.UserName,
                         input.Password,
                         input.MediaObject);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "metaWeblog.getCategories":
-                    output.Categories = await service.GetCategories(
+                    if (permission.CanEditPosts || permission.CanEditPages)
+                    {
+                        output.Categories = await service.GetCategories(
                         input.BlogId,
                         input.UserName,
                         input.Password,
                         cancellationToken);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "wp.newCategory":
-                    output.CategoryId = await service.NewCategory(
-                        input.BlogId, 
+                    if (permission.CanEditPosts || permission.CanEditPages)
+                    {
+                        output.CategoryId = await service.NewCategory(
+                        input.BlogId,
                         input.Category,
                         input.UserName,
                         input.Password
                         );
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "metaWeblog.getRecentPosts":
-                    var posts = await service.GetRecentPosts(
+                    if (permission.CanEditPosts)
+                    {
+                        var posts = await service.GetRecentPosts(
                         input.BlogId,
                         input.UserName,
                         input.Password,
                         input.NumberOfPosts,
                         cancellationToken);
 
-                    output.Posts = posts;
+                        output.Posts = posts;
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
                     break;
                 case "blogger.getUsersBlogs":
                 case "metaWeblog.getUsersBlogs":
@@ -112,72 +167,118 @@ namespace cloudscribe.MetaWeblog
                         cancellationToken);
                     break;
                 case "blogger.deletePost":
-                    output.Completed = await service.DeletePost(
+                    if (permission.CanEditPosts)
+                    {
+                        output.Completed = await service.DeletePost(
                         input.BlogId,
                         input.PostId,
                         input.UserName,
                         input.Password
                         );
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "blogger.getUserInfo":
                     // Not implemented.  Not planned.
                     throw new MetaWeblogException("10", "The method GetUserInfo is not implemented.");
                 case "wp.newPage":
-                    
-
-                    //throw new MetaWeblogException("10", "The method newPage is not implemented.");
-                    output.PageId = await service.NewPage(
+                    if (permission.CanEditPages)
+                    {
+                        output.PageId = await service.NewPage(
                         input.BlogId,
                         input.UserName,
                         input.Password,
-                        input.Page, 
+                        input.Page,
                         input.Publish);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "wp.getPageList":
-                    
-                    output.Pages = await service.GetPageList(
+                    if (permission.CanEditPages)
+                    {
+                        output.Pages = await service.GetPageList(
                         input.BlogId,
                         input.UserName,
                         input.Password,
                         cancellationToken);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "wp.getPages":
-                    
-                    output.Pages = await service.GetPages(
+                    if (permission.CanEditPages)
+                    {
+                        output.Pages = await service.GetPages(
                         input.BlogId,
                         input.UserName,
                         input.Password,
                         cancellationToken);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "wp.getPage":
-                   
-                    output.Page = await service.GetPage(
-                        input.BlogId, 
+                    if (permission.CanEditPages)
+                    {
+                        output.Page = await service.GetPage(
+                        input.BlogId,
                         input.PageId,
                         input.UserName,
                         input.Password,
                         cancellationToken);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "wp.editPage":
-                    
-                    output.Completed = await service.EditPage(
-                        input.BlogId, 
+                    if (permission.CanEditPages)
+                    {
+                        output.Completed = await service.EditPage(
+                        input.BlogId,
                         input.PageId,
                         input.UserName,
                         input.Password,
-                        input.Page, 
+                        input.Page,
                         input.Publish);
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "wp.deletePage":
-                    
-                    // Not implemented. 
-                    //throw new MetaWeblogException("10", "The method deletePage is not implemented.");
-                    output.Completed = await service.DeletePage(
-                        input.BlogId, 
+                    if (permission.CanEditPages)
+                    {
+                        output.Completed = await service.DeletePage(
+                        input.BlogId,
                         input.PageId,
                         input.UserName,
                         input.Password
                         );
+                    }
+                    else
+                    {
+                        output.AddSecurityFault();
+                    }
+
                     break;
                 case "wp.getAuthors":
                     // Not implemented. 
