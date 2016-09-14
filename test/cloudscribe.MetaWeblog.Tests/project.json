@@ -15,7 +15,7 @@
             "version": "2.2.0-preview2-build1029",
             "target": "package"
         },
-        "Microsoft.NETCore.Platforms": "1.0.1-rc2-*"
+        "Microsoft.NETCore.Platforms": "1.0.1-*"
     },
 
     "frameworks": {
