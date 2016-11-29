@@ -1,5 +1,5 @@
 ﻿{
-    "version": "1.0.1-rc20160914",
+    "version": "1.1.0",
     "description": "a re-useable implementation of the metaweblog api for asp.net core",
     "authors": [ "Joe Audette" ],
     "packOptions": {
@@ -15,12 +15,12 @@
 
 
     "dependencies": {
-        "NETStandard.Library": "1.6.0-*",
-        "Microsoft.Extensions.Options": "1.0.*",
-        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.*",
-        "Microsoft.Extensions.Logging.Abstractions": "1.0.*",
-        "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.*",
-        "Microsoft.AspNetCore.Mvc": "1.0.*"
+        "NETStandard.Library": "1.6.1",
+        "Microsoft.Extensions.Options": "1.1.*",
+        "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.*",
+        "Microsoft.Extensions.Logging.Abstractions": "1.1.*",
+        "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.1.*",
+        "Microsoft.AspNetCore.Mvc": "1.1.*"
     },
 
     "frameworks": {
