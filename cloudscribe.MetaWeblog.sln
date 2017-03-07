@@ -1,20 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{ED00ACC0-1941-4E8D-8290-8BE5899A239B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3A0BC411-4293-4599-AD9D-B94C52EA8D33}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.MetaWeblog", "src\cloudscribe.MetaWeblog\cloudscribe.MetaWeblog.xproj", "{6000FC8E-4634-4D10-BD45-D089D000393A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{DB18D872-684C-42E1-8F7F-7CDFA24DF6FF}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "cloudscribe.MetaWeblog.Tests", "test\cloudscribe.MetaWeblog.Tests\cloudscribe.MetaWeblog.Tests.xproj", "{EFC95303-913F-48FF-A938-F650A08D17D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.MetaWeblog", "src\cloudscribe.MetaWeblog\cloudscribe.MetaWeblog.csproj", "{6000FC8E-4634-4D10-BD45-D089D000393A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "cloudscribe.MetaWeblog.Tests", "test\cloudscribe.MetaWeblog.Tests\cloudscribe.MetaWeblog.Tests.csproj", "{EFC95303-913F-48FF-A938-F650A08D17D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
