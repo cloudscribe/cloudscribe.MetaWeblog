@@ -16,5 +16,8 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 [![Join the chat at https://gitter.im/joeaudette/cloudscribe](https://badges.gitter.im/joeaudette/cloudscribe.svg)](https://gitter.im/joeaudette/cloudscribe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+### Build Status
 
+[![Build Status](https://travis-ci.org/joeaudette/cloudscribe.MetaWeblog.svg?branch=master)](https://travis-ci.org/joeaudette/cloudscribe.MetaWeblog)
+[![Build status](https://ci.appveyor.com/api/projects/status/7ur2ayclpbdc985x?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-metaweblog)
 
