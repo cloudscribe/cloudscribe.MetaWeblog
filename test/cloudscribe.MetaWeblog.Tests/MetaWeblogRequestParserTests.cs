@@ -2,18 +2,12 @@
 // Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
 // Author:                  Joe Audette
 // Created:                 2016-02-16
-// Last Modified:           2016-02-16
+// Last Modified:           2017-07-20
 // 
 
-using cloudscribe.MetaWeblog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using Xunit;
-//using Microsoft.Extensions.PlatformAbstractions
+
 
 namespace cloudscribe.MetaWeblog.Tests
 {
