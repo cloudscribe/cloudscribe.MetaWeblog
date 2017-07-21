@@ -18,6 +18,7 @@ If you have questions or just want to be social, say hello in our gitter chat ro
 
 ### Build Status
 
-[![Build Status](https://travis-ci.org/joeaudette/cloudscribe.MetaWeblog.svg?branch=master)](https://travis-ci.org/joeaudette/cloudscribe.MetaWeblog)
-[![Build status](https://ci.appveyor.com/api/projects/status/7ur2ayclpbdc985x?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-metaweblog)
+| Windows  | Linux/Mac |
+| ------------- | ------------- |
+| [![Build status](https://ci.appveyor.com/api/projects/status/7ur2ayclpbdc985x?svg=true)](https://ci.appveyor.com/project/joeaudette/cloudscribe-metaweblog)  | [![Build Status](https://travis-ci.org/joeaudette/cloudscribe.MetaWeblog.svg?branch=master)](https://travis-ci.org/joeaudette/cloudscribe.MetaWeblog)  |
 
