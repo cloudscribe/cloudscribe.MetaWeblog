@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace cloudscribe.MetaWeblog.Controllers
 {
-    [Route("api/[controller]")]
+    
     public class MetaWeblogController : Controller
     {
         public MetaWeblogController(
@@ -32,40 +32,42 @@ namespace cloudscribe.MetaWeblog.Controllers
             ILogger<MetaWeblogController> logger,
             IOptions<ApiOptions> optionsAccessor = null)
         {
-            this.appEnv = appEnv;
-            parser = metaWeblogRequestParser;
-            processor = metaWeblogProcessor;
-            formatter = metaWeblogResultFormatter;
-            security = metaWeblogSecurity;
-            validator = metaWebLogRequestValidator;
-            log = logger;
+            HostingEnvironment = appEnv;
+            RequestParser = metaWeblogRequestParser;
+            RequestProcessor = metaWeblogProcessor;
+            ResultFormatter = metaWeblogResultFormatter;
+            Security = metaWeblogSecurity;
+            RequestValidator = metaWebLogRequestValidator;
+            Log = logger;
             if(optionsAccessor != null)
             {
-               options = optionsAccessor.Value;
+               ApiOptions = optionsAccessor.Value;
             }
             else
             {
-                options = new ApiOptions(); // just use the default options
+                ApiOptions = new ApiOptions(); // just use the default options
             }
            
         }
 
-        private IHostingEnvironment appEnv;
-        private ApiOptions options;
-        private IMetaWeblogSecurity security;
-        private IMetaWeblogRequestProcessor processor;
-        private IMetaWeblogRequestParser parser;
-        private IMetaWeblogResultFormatter formatter;
-        private IMetaWeblogRequestValidator validator;
-        private ILogger log;
-        
+        protected IHostingEnvironment HostingEnvironment { get; private set; }
+        protected ApiOptions ApiOptions { get; private set; }
+        protected IMetaWeblogSecurity Security { get; private set; }
+        protected IMetaWeblogRequestProcessor RequestProcessor { get; private set; }
+        protected IMetaWeblogRequestParser RequestParser { get; private set; }
+        protected IMetaWeblogResultFormatter ResultFormatter { get; private set; }
+        protected IMetaWeblogRequestValidator RequestValidator { get; private set; }
+        protected ILogger Log { get; private set; }
+
+
         [HttpPost]
-        public async Task<IActionResult> Index()
+        [Route("api/metaweblog")]
+        public virtual async Task<IActionResult> Index()
         {
             CancellationToken cancellationToken = HttpContext?.RequestAborted ?? CancellationToken.None;
 
-            var dumpFileBasePath = appEnv.ContentRootPath
-                + options.AppRootDumpFolderVPath.Replace('/', Path.DirectorySeparatorChar);
+            var dumpFileBasePath = HostingEnvironment.ContentRootPath
+                + ApiOptions.AppRootDumpFolderVPath.Replace('/', Path.DirectorySeparatorChar);
 
             XDocument postedXml = null;
             XDocument resultXml;
@@ -80,9 +82,9 @@ namespace cloudscribe.MetaWeblog.Controllers
             }
             catch(Exception ex)
             {
-                log.LogError("oops", ex);
+                Log.LogError("oops", ex);
 
-                if (options.DumpRequestXmlToDisk)
+                if (ApiOptions.DumpRequestXmlToDisk)
                 {
                     var requestFileName = dumpFileBasePath + "request-with-error" + Utils.GetDateTimeStringForFileName(true) + ".txt";
                     using (StreamWriter s = System.IO.File.CreateText(requestFileName))
@@ -97,14 +99,14 @@ namespace cloudscribe.MetaWeblog.Controllers
                 faultStruct.faultCode = "802"; // invalid access
                 faultStruct.faultString = "invalid access";
                 outCome.Fault = faultStruct;
-                resultXml = formatter.Format(outCome);
+                resultXml = ResultFormatter.Format(outCome);
                 return new XmlResult(resultXml);
             }
             
 
-            var metaWeblogRequest = parser.ParseRequest(postedXml);
+            var metaWeblogRequest = RequestParser.ParseRequest(postedXml);
 
-            if (options.DumpRequestXmlToDisk)
+            if (ApiOptions.DumpRequestXmlToDisk)
             {
                 var requestFileName = dumpFileBasePath + "request-" 
                     + Utils.GetDateTimeStringForFileName(true)  + "-"
@@ -116,7 +118,7 @@ namespace cloudscribe.MetaWeblog.Controllers
                 }
             }
 
-            var permissions = await security.ValiatePermissions(metaWeblogRequest, cancellationToken);
+            var permissions = await Security.ValiatePermissions(metaWeblogRequest, cancellationToken);
 
             if(string.IsNullOrEmpty(metaWeblogRequest.BlogId))
             {
@@ -126,27 +128,27 @@ namespace cloudscribe.MetaWeblog.Controllers
             if((!permissions.CanEditPosts)&&(!permissions.CanEditPages))
             {
                 outCome = new MetaWeblogResult();
-                resultXml = formatter.Format(outCome);
+                resultXml = ResultFormatter.Format(outCome);
                 return new XmlResult(resultXml);
             }
 
-            var isValid = await validator.IsValid(metaWeblogRequest, cancellationToken);
+            var isValid = await RequestValidator.IsValid(metaWeblogRequest, cancellationToken);
             if (!isValid)
             {
                 outCome = new MetaWeblogResult();
                 outCome.AddValidatonFault();
-                resultXml = formatter.Format(outCome);
+                resultXml = ResultFormatter.Format(outCome);
                 return new XmlResult(resultXml);
             }
             
-            outCome = await processor.ProcessRequest(
+            outCome = await RequestProcessor.ProcessRequest(
                 metaWeblogRequest, 
                 permissions, 
                 cancellationToken);
 
-            resultXml = formatter.Format(outCome);
+            resultXml = ResultFormatter.Format(outCome);
 
-            if (options.DumpResponseXmlToDisk)
+            if (ApiOptions.DumpResponseXmlToDisk)
             {
                 var reseponseFileName = dumpFileBasePath + "response-" 
                     + Utils.GetDateTimeStringForFileName(true) + "-"
