@@ -168,7 +168,7 @@ namespace cloudscribe.MetaWeblog
                     result.Page = GetPage(inputParams[4]);
                     if (inputParams.Count > 5)
                     {
-                        result.Publish = inputParams[4].Value != "0" && inputParams[4].Value != "false";
+                        result.Publish = inputParams[5].Value != "0" && inputParams[5].Value != "false";
                     }
                     else
                     {
