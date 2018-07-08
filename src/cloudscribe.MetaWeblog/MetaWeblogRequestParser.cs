@@ -149,7 +149,9 @@ namespace cloudscribe.MetaWeblog
                     result.Page = GetPage(inputParams[3]);
                     if (inputParams.Count > 4)
                     {
-                        result.Publish = inputParams[4].Value != "0" && inputParams[4].Value != "false";
+                        var p = inputParams[4].Descendants("boolean").SingleOrDefault().Value;
+                        result.Publish = p != "0" && p != "false";
+                        //result.Publish = inputParams[4].Value != "0" && inputParams[4].Value != "false";
                     }
 
 
@@ -168,7 +170,9 @@ namespace cloudscribe.MetaWeblog
                     result.Page = GetPage(inputParams[4]);
                     if (inputParams.Count > 5)
                     {
-                        result.Publish = inputParams[5].Value != "0" && inputParams[5].Value != "false";
+                        var p = inputParams[5].Descendants("boolean").SingleOrDefault().Value;
+                        result.Publish = p != "0" && p != "false";
+                        
                     }
                     else
                     {
