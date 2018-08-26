@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace cloudscribe.MetaWeblog.Controllers
 {
-    
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class MetaWeblogController : Controller
     {
         public MetaWeblogController(
