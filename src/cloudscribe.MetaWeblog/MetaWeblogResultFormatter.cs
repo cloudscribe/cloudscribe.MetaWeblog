@@ -238,15 +238,25 @@ namespace cloudscribe.MetaWeblog
 
                 structElement.Add(blogIdElement);
 
-                var blogNameElement
+                var pageNameElement
                     = new XElement("member",
                     new XElement("name", "page_title"),
                     new XElement("value",
                     new XElement("string", page.title)
                     ) //end value
                     ); // end member
+                
+                structElement.Add(pageNameElement);
 
-                structElement.Add(blogNameElement);
+                var pageTitleElement
+                    = new XElement("member",
+                    new XElement("name", "title"),
+                    new XElement("value",
+                    new XElement("string", page.title)
+                    ) //end value
+                    ); // end member
+
+                structElement.Add(pageTitleElement);
 
                 var descElement
                     = new XElement("member",
