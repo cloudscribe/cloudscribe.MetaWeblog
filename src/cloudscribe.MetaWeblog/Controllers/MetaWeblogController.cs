@@ -1,8 +1,7 @@
-﻿// Copyright (c) Source Tree Solutions, LLC. All rights reserved.
-// Licensed under the Apache License, Version 2.0. See License.txt in the project root for license information.
+﻿// Licensed under the Apache License, Version 2.0
 // Author:                  Joe Audette
 // Created:                 2016-02-07
-// Last Modified:           2016-08-10
+// Last Modified:           2019-09-02
 // 
 
 using cloudscribe.MetaWeblog.Models;
@@ -23,7 +22,7 @@ namespace cloudscribe.MetaWeblog.Controllers
     public class MetaWeblogController : Controller
     {
         public MetaWeblogController(
-            IHostingEnvironment appEnv,
+            IWebHostEnvironment appEnv,
             IMetaWeblogRequestParser metaWeblogRequestParser,
             IMetaWeblogRequestProcessor metaWeblogProcessor,
             IMetaWeblogResultFormatter metaWeblogResultFormatter,
@@ -50,7 +49,7 @@ namespace cloudscribe.MetaWeblog.Controllers
            
         }
 
-        protected IHostingEnvironment HostingEnvironment { get; private set; }
+        protected IWebHostEnvironment HostingEnvironment { get; private set; }
         protected ApiOptions ApiOptions { get; private set; }
         protected IMetaWeblogSecurity Security { get; private set; }
         protected IMetaWeblogRequestProcessor RequestProcessor { get; private set; }
