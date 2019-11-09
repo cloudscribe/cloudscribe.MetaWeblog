@@ -1,6 +1,6 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 environment:
-  nodejs_version: "6.9.1"
+  nodejs_version: "13.0.1"
 # Install scripts. (runs after repo cloning)
 install:
   # Get the latest stable version of Node.js or io.js
@@ -11,10 +11,10 @@ init:
 build_script:
   - dotnet restore
   - dotnet build -c Release
-test_script:
-  - dotnet test -c Release .\test\cloudscribe.MetaWeblog.Tests\cloudscribe.MetaWeblog.Tests.csproj
-clone_depth: 1
-test: on
+# test_script:
+#  - dotnet test -c Release .\test\cloudscribe.MetaWeblog.Tests\cloudscribe.MetaWeblog.Tests.csproj
+# clone_depth: 1
+# test: on
 
 
   
