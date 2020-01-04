@@ -51,7 +51,12 @@ namespace cloudscribe.MetaWeblog
             string userName,
             string password,
             CancellationToken cancellationToken);
-        
+
+        Task<IEnumerable<TagStruct>> GetTags(
+            string blogId,
+            string userName,
+            string password,
+            CancellationToken cancellationToken);
 
         //metaWeblog.getRecentPosts
         Task<List<PostStruct>> GetRecentPosts(

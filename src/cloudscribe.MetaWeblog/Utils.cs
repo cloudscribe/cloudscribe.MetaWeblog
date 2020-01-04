@@ -1,85 +1,28 @@
 ﻿
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace cloudscribe.MetaWeblog
 {
     public static class Utils
     {
-        public static string GetDateTimeStringForFileName()
+        public static string GetDateTimeStringForFileName(bool includeMiliseconds = false)
         {
-            return GetDateTimeStringForFileName(false);
-        }
+            var d = DateTime.Now;          
 
-        public static string GetDateTimeStringForFileName(bool includeMiliseconds)
-        {
-            DateTime d = DateTime.Now;
-            string dateString = d.Year.ToInvariantString();
-
-            string monthString = d.Month.ToInvariantString();
-            if (monthString.Length == 1)
-            {
-                monthString = "0" + monthString;
-            }
-            string dayString = d.Day.ToInvariantString();
-            if (dayString.Length == 1)
-            {
-                dayString = "0" + dayString;
-            }
-            string hourString = d.Hour.ToInvariantString();
-            if (hourString.Length == 1)
-            {
-                hourString = "0" + hourString;
-            }
-
-            string minuteString = d.Minute.ToInvariantString();
-            if (minuteString.Length == 1)
-            {
-                minuteString = "0" + minuteString;
-            }
-
-            string secondString = d.Second.ToInvariantString();
-            if (secondString.Length == 1)
-            {
-                secondString = "0" + secondString;
-            }
-
-            dateString
-                = dateString
-                + monthString
-                + dayString
-                + hourString
-                + minuteString + secondString;
-
+            var dateString = d.ToString("yyyyMMddhhmmss");
             if (includeMiliseconds)
             {
-                return dateString + d.Millisecond.ToInvariantString();
+                return dateString + d.Millisecond.ToString("d3");
             }
-
             return dateString;
         }
+       
 
-
-        public static string ToInvariantString(this int i)
+        public static string ConvertDatetoISO8601(this DateTime date)
         {
-            return i.ToString(CultureInfo.InvariantCulture);
-
-        }
-
-        public static string ConvertDatetoISO8601(DateTime date)
-        {
-            var temp = string.Format(
-                "{0}{1}{2}T{3}:{4}:{5}",
-                date.Year,
-                date.Month.ToString().PadLeft(2, '0'),
-                date.Day.ToString().PadLeft(2, '0'),
-                date.Hour.ToString().PadLeft(2, '0'),
-                date.Minute.ToString().PadLeft(2, '0'),
-                date.Second.ToString().PadLeft(2, '0'));
-            return temp;
+            //produces e.g. 2020-01-04T13:13:52
+            return date.ToString("s", CultureInfo.InvariantCulture);
         }
 
         //iso8601 often come in slightly different flavours rather than the standard "s" that string.format supports.

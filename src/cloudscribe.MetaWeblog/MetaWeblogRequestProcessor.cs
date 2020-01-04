@@ -6,6 +6,7 @@
 // 
 
 using cloudscribe.MetaWeblog.Models;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -21,7 +22,7 @@ namespace cloudscribe.MetaWeblog
             
         }
 
-        private IMetaWeblogService service;
+        private readonly IMetaWeblogService service;
         
         public async Task<MetaWeblogResult> ProcessRequest(
             MetaWeblogRequest input,
@@ -286,10 +287,9 @@ namespace cloudscribe.MetaWeblog
                 //output.Authors = this.GetAuthors(input.BlogID, input.UserName, input.Password);
                 //break;
                 case "wp.getTags":
-                    // Not implemented. 
-                    throw new MetaWeblogException("10", "The method getTags is not implemented.");
-                    //output.Keywords = this.GetKeywords(input.BlogID, input.UserName, input.Password);
-                    //break;
+                    var tags = await service.GetTags(input.BlogId, input.UserName, input.Password, default);
+                    output.Keywords.AddRange( tags.Select(s => s.name));
+                    break;
             }
 
 

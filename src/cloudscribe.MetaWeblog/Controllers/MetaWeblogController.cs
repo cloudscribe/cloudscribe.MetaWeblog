@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
 using Microsoft.AspNetCore.Hosting;
-
+using System.Xml;
 
 namespace cloudscribe.MetaWeblog.Controllers
 {
@@ -71,33 +71,34 @@ namespace cloudscribe.MetaWeblog.Controllers
             XDocument postedXml = null;
             XDocument resultXml;
             MetaWeblogResult outCome;
-            FaultStruct faultStruct;
+
             try
             {
                 using (HttpContext.Request.Body)
                 {
-                    postedXml = XDocument.Load(HttpContext.Request.Body);
+                    postedXml = await XDocument.LoadAsync(HttpContext.Request.Body, LoadOptions.None, default);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                Log.LogError("oops", ex);
+                Log.LogError("oops {0}", ex);
 
                 if (ApiOptions.DumpRequestXmlToDisk)
                 {
                     var requestFileName = dumpFileBasePath + "request-with-error" + Utils.GetDateTimeStringForFileName(true) + ".txt";
-                    using (StreamWriter s = System.IO.File.CreateText(requestFileName))
-                    {
-                        //postedXml.Save(s, SaveOptions.None);
-                        await HttpContext.Request.Body.CopyToAsync(s.BaseStream);
-                    }
+                    using var s = System.IO.File.Create(requestFileName);
+                    //postedXml.Save(s, SaveOptions.None);
+                    await HttpContext.Request.Body.CopyToAsync(s);
                 }
 
-                outCome = new MetaWeblogResult();
-                faultStruct = new FaultStruct();
-                faultStruct.faultCode = "802"; // invalid access
-                faultStruct.faultString = "invalid access";
-                outCome.Fault = faultStruct;
+                outCome = new MetaWeblogResult
+                {
+                    Fault = new FaultStruct
+                    {
+                        faultCode = "802", // invalid access
+                        faultString = "invalid access"
+                    }
+                };
                 resultXml = ResultFormatter.Format(outCome);
                 return new XmlResult(resultXml);
             }
@@ -111,10 +112,11 @@ namespace cloudscribe.MetaWeblog.Controllers
                     + Utils.GetDateTimeStringForFileName(true)  + "-"
                     + metaWeblogRequest.MethodName.Replace(".","-")
                     + ".xml";
-                using (StreamWriter s = System.IO.File.CreateText(requestFileName))
-                {
-                    postedXml.Save(s, SaveOptions.None);
-                }
+                using var s = System.IO.File.Create(requestFileName);
+                //await postedXml.SaveAsync(s, SaveOptions.None, default);
+                var xmlWriter = XmlWriter.Create(s, settings: new XmlWriterSettings { Async = true });
+                await postedXml.WriteToAsync(xmlWriter, default);
+                await xmlWriter.FlushAsync();
             }
 
             var permissions = await Security.ValiatePermissions(metaWeblogRequest, cancellationToken);
@@ -154,10 +156,11 @@ namespace cloudscribe.MetaWeblog.Controllers
                     + outCome.Method.Replace(".", "-") 
                     + ".xml";
 
-                using (StreamWriter s = System.IO.File.CreateText(reseponseFileName))
-                {
-                    resultXml.Save(s, SaveOptions.None);
-                }
+                using var s = System.IO.File.Create(reseponseFileName);
+                // await resultXml.SaveAsync(s, SaveOptions.None, default);
+                var xmlWriter = XmlWriter.Create(s, settings: new XmlWriterSettings { Async = true });
+                await resultXml.WriteToAsync(xmlWriter, default);
+                await xmlWriter.FlushAsync();
             }
 
             return new XmlResult(resultXml);

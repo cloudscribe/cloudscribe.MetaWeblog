@@ -8,7 +8,7 @@ namespace cloudscribe.MetaWeblog.Models
     /// <remarks>
     /// Not used currently, but here for completeness.
     /// </remarks>
-    public class UserInfoStruct
+    public struct UserInfoStruct
     {
         /// <summary>
         /// User Name Proper

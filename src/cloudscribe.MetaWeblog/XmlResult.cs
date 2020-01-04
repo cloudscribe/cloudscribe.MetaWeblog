@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 //http://tech-journals.com/jonow/2012/01/25/implementing-xml-rpc-services-with-asp-net-mvc
@@ -32,26 +34,28 @@ namespace cloudscribe.MetaWeblog
             context.HttpContext.Response.ContentType = this.ContentType;
             if (Xml != null)
             {
+                
                 Xml.Save(context.HttpContext.Response.Body, SaveOptions.DisableFormatting);
 
             }
         }
         //#endif
 
-        public override Task ExecuteResultAsync(ActionContext context)
+        public override async Task ExecuteResultAsync(ActionContext context)
         {
             context.HttpContext.Response.ContentType = this.ContentType;
 
             if (Xml != null)
             {
-                Xml.Save(context.HttpContext.Response.Body, SaveOptions.DisableFormatting);
-                return Task.FromResult(0);
+               var xmlWriter = XmlWriter.Create(context.HttpContext.Response.Body, settings: new XmlWriterSettings { Async = true });
+
+                await Xml.WriteToAsync(xmlWriter, default);
+                //Synchronous operations are disallowed. Call WriteAsync or set AllowSynchronousIO to true instead
+                //await  Xml.SaveAsync(context.HttpContext.Response.Body, SaveOptions.DisableFormatting, default);
+                await xmlWriter.FlushAsync();
 
             }
-            else
-            {
-                return base.ExecuteResultAsync(context);
-            }
+          
         }
     }
 }

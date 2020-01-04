@@ -724,7 +724,7 @@ namespace cloudscribe.MetaWeblog
                         new XElement("member",
                         new XElement("name", "dateCreated"),
                         new XElement("value",
-                        new XElement("string", Utils.ConvertDatetoISO8601(post.postDate))
+                        new XElement("string", post.postDate.ConvertDatetoISO8601())
                         )// end value
                         ); // end member
 
@@ -1110,7 +1110,7 @@ namespace cloudscribe.MetaWeblog
                 new XElement("member",
                 new XElement("name", "dateCreated"),
                 new XElement("value",
-                new XElement("dateTime.iso8601", Utils.ConvertDatetoISO8601(metaWeblogResult.Post.postDate))
+                new XElement("dateTime.iso8601", metaWeblogResult.Post.postDate.ConvertDatetoISO8601())
                 ) // end value
                 ); //end member
 
