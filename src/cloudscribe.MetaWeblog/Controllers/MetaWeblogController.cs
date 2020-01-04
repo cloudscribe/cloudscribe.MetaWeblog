@@ -76,7 +76,9 @@ namespace cloudscribe.MetaWeblog.Controllers
             {
                 using (HttpContext.Request.Body)
                 {
+                    //https://stackoverflow.com/questions/47735133/asp-net-core-synchronous-operations-are-disallowed-call-writeasync-or-set-all
                     postedXml = await XDocument.LoadAsync(HttpContext.Request.Body, LoadOptions.None, default);
+                    // you need to set AllowSynchronousIO to true to get line above working
                 }
             }
             catch (Exception ex)
